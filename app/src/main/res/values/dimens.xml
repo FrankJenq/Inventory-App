@@ -1,0 +1,23 @@
+<resources>
+    <!-- Margin around the floating action button in ListActivity -->
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Common margin value used throughout the app -->
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="image_scale">60dp</dimen>
+    <dimen name="layout_top">10dp</dimen>
+    <dimen name="page_padding">12dp</dimen>
+    <dimen name="profile_image">120dp</dimen>
+    <dimen name="price_text_size">36sp</dimen>
+    <dimen name="button_text_size">22sp</dimen>
+    <dimen name="button_margin">8dp</dimen>
+    <dimen name="button_padding">16dp</dimen>
+    <dimen name="margin_price">28dp</dimen>
+    <dimen name="unit_button_size">48dp</dimen>
+    <dimen name="sales_text_size">36sp</dimen>
+    <dimen name="margin_sales">40dp</dimen>
+    <dimen name="margin_image">30dp</dimen>
+    <dimen name="margin_upload_image">22dp</dimen>
+    <dimen name="upload_text_size">36sp</dimen>
+</resources>
+

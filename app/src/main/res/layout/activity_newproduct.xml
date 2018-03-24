@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_margin"
+    tools:context=".NewProductActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <!-- 产品名称项 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- 标签 -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:text="@string/label_name" />
+
+                <!-- 名称输入区 -->
+                <EditText
+                    android:id="@+id/new_product_name"
+                    style="@style/EditorFieldStyle"
+                    android:hint="@string/hint_name" />
+
+            </LinearLayout>
+
+            <!-- 产品数量项 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- 标签 -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:text="@string/label_quantity" />
+
+                <!-- 数量输入区 -->
+                <EditText
+                    android:id="@+id/new_product_quantity"
+                    style="@style/EditorFieldStyle"
+                    android:hint="@string/hint_quantity" />
+
+            </LinearLayout>
+
+            <!-- 产品价格项 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- 标签 -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:text="@string/label_price" />
+
+                <!-- 价格输入区 -->
+                <EditText
+                    android:id="@+id/new_product_price"
+                    style="@style/EditorFieldStyle"
+                    android:hint="@string/hint_price" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/upload_image"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/margin_upload_image"
+                android:background="@android:color/darker_gray"
+                android:text="@string/upload_image_info"
+                android:textSize="@dimen/upload_text_size"/>
+
+            <ImageView
+                android:id="@+id/image_select"
+                android:layout_width="@dimen/profile_image"
+                android:layout_height="@dimen/profile_image" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_button" />
+
+</LinearLayout>
