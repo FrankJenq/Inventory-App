@@ -82,7 +82,7 @@
                 <!-- 标签 -->
                 <TextView
                     style="@style/CategoryStyle"
-                    android:text="@string/label_price" />
+                    android:text="@string/label_address" />
 
                 <!-- 联系方式输入区 -->
                 <EditText

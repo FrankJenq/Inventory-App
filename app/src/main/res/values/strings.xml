@@ -45,4 +45,5 @@
     <string name="invalid_email_address">无效的Email地址</string>
     <string name="email_subject">订购商品</string>
     <string name="choose_email_app">Send email...</string>
+    <string name="label_address">地址</string>
 </resources>
