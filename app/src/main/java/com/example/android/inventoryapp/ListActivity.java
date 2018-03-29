@@ -33,25 +33,35 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         ListView listView = findViewById(R.id.list);
+
+        //设置空白提示
+        View emptyView = findViewById(R.id.empty_text);
+        listView.setEmptyView(emptyView);
+
+        //设置新的CursorAdapter
         productAdapter = new ProductCursorAdapter(this, null);
         listView.setAdapter(productAdapter);
+
         // 设置OnItemClickListener
         // 点击列表中的产品项会进入详情页面
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListActivity.this,EditActivity.class);
-                Uri currentUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI,id);
+                Intent intent = new Intent(ListActivity.this, EditActivity.class);
+                Uri currentUri = ContentUris.withAppendedId(ProductEntry.CONTENT_URI, id);
                 intent.setData(currentUri);
                 startActivity(intent);
             }
         });
+
+        //初始化Loader
         getLoaderManager().initLoader(PRODUCT_LOADER, null, this);
     }
 
     /**
      * 设置主界面选项菜单
      * 可以选择添加新产品
+     *
      * @param menu
      * @return
      */
@@ -73,7 +83,7 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
                 return true;
             case R.id.action_add_dummy_data:
                 insertDummyProduct();
-                Toast.makeText(getApplicationContext(), R.string.toast_add_dummy,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), R.string.toast_add_dummy, Toast.LENGTH_SHORT).show();
                 return true;
 
         }
@@ -82,13 +92,14 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private void insertDummyProduct() {
         ContentValues values = new ContentValues();
-        Bitmap image = BitmapFactory.decodeResource(this.getResources(),R.drawable.empty_image);
+        Bitmap image = BitmapFactory.decodeResource(this.getResources(), R.drawable.empty_image);
         values.put(ProductEntry.COLUMN_NAME, getString(R.string.dummy_name));
         values.put(ProductEntry.COLUMN_IMAGE, DbBitmapUtility.getBytes(image));
         values.put(ProductEntry.COLUMN_QUANTITY, 10);
         values.put(ProductEntry.COLUMN_PRICE, 5);
-        values.put(ProductEntry.COLUMN_SALES,0);
-        values.put(ProductEntry.COLUMN_UNIT,1);
+        values.put(ProductEntry.COLUMN_SALES, 0);
+        values.put(ProductEntry.COLUMN_UNIT, 1);
+        values.put(ProductEntry.COLUMN_CONTACT,getString(R.string.dummy_contact));
 
         // Insert a new row for Toto into the provider using the ContentResolver.
         // Use the {@link PetEntry#CONTENT_URI} to indicate that we want to insert
@@ -117,7 +128,8 @@ public class ListActivity extends AppCompatActivity implements LoaderManager.Loa
                 ProductEntry.COLUMN_IMAGE,
                 ProductEntry.COLUMN_QUANTITY,
                 ProductEntry.COLUMN_PRICE,
-                ProductEntry.COLUMN_SALES
+                ProductEntry.COLUMN_SALES,
+                ProductEntry.COLUMN_UNIT
         };
         return new CursorLoader(this, ProductEntry.CONTENT_URI,
                 projection, null, null, null);

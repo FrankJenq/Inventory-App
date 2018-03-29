@@ -27,6 +27,7 @@ public class NewProductActivity extends AppCompatActivity {
     private EditText mNameEditText;
     private EditText mQuantityEditText;
     private EditText mPriceEditText;
+    private EditText mContactEditText;
     private ImageView mImageView;
     private TextView mUploadImageTextView;
     private Bitmap mSelectedImage;
@@ -38,6 +39,7 @@ public class NewProductActivity extends AppCompatActivity {
         mNameEditText = findViewById(R.id.new_product_name);
         mQuantityEditText = findViewById(R.id.new_product_quantity);
         mPriceEditText = findViewById(R.id.new_product_price);
+        mContactEditText = findViewById(R.id.new_product_contact);
         mUploadImageTextView = findViewById(R.id.upload_image);
         mImageView = findViewById(R.id.image_select);
         mImageView.setVisibility(View.GONE);
@@ -78,40 +80,54 @@ public class NewProductActivity extends AppCompatActivity {
         String mNameString = mNameEditText.getText().toString();
         String mQuantityString = mQuantityEditText.getText().toString();
         String mPriceString = mPriceEditText.getText().toString();
-        if (TextUtils.isEmpty(mNameString + mQuantityString + mPriceString) && mSelectedImage == null) {
+        String mContactString = mContactEditText.getText().toString();
+        if (TextUtils.isEmpty(mNameString + mQuantityString + mPriceString + mContactString)
+                && mSelectedImage == null) {
             finish();
             return;
         }// 检查是否所有项目都没有输入内容
-        // 如果是这样那么直接返回主页面
-        if (TextUtils.isEmpty(mNameString)){
+        // 如果是这样那么直接返回ListActivity
+        if (TextUtils.isEmpty(mNameString) || TextUtils.isEmpty(mQuantityString) ||
+                TextUtils.isEmpty(mPriceString) || TextUtils.isEmpty(mContactString)) {
             Toast.makeText(getApplicationContext(), getString(R.string.toast_empty_name), Toast.LENGTH_SHORT).show();
             return;
-        }//商品名称为空时显示提示信息
-        int mQuantity;
-        if (!TextUtils.isEmpty(mQuantityString) && Integer.parseInt(mQuantityString.trim()) >= 0) {
-            mQuantity = Integer.parseInt(mQuantityString.trim());
-        } else {
-            mQuantity = 0;
-        }  // 未输入初始数量或者输入数量为负数时将商品数量初始化为0
-        int mPrice;
-        if (!TextUtils.isEmpty(mPriceString) && Integer.parseInt(mPriceString.trim()) >= 0) {
-            mPrice = Integer.parseInt(mPriceString.trim());
-        } else {
-            mPrice = 0;
-        }  // 未输入单价或者输入价格为负数时将价格初始化为0
+        }//有输入项为空时显示提示信息
+
+        int quantity;
+        try {
+            quantity = Integer.parseInt(mQuantityString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.invalid_quantity), Toast.LENGTH_SHORT).show();
+            return;
+        }//检查库存数据是否有效
+
+        int price;
+        try {
+            price = Integer.parseInt(mPriceString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(getApplicationContext(), getString(R.string.invalid_price), Toast.LENGTH_SHORT).show();
+            return;
+        }//检查价格数据是否有效
+
+        if (!isValidEmail(mContactString)) {
+            Toast.makeText(getApplicationContext(), R.string.invalid_email_address, Toast.LENGTH_SHORT).show();
+            return;
+        }//检查Email地址是否有效
+
         values.put(ProductEntry.COLUMN_NAME, mNameString.trim());
-        values.put(ProductEntry.COLUMN_QUANTITY,mQuantity);
-        values.put(ProductEntry.COLUMN_PRICE, mPrice);
-        values.put(ProductEntry.COLUMN_SALES,0);//设置初始销量为0
-        values.put(ProductEntry.COLUMN_UNIT,1);//设置初始销售单位为1
+        values.put(ProductEntry.COLUMN_QUANTITY, quantity);
+        values.put(ProductEntry.COLUMN_PRICE, price);
+        values.put(ProductEntry.COLUMN_SALES, 0);//设置初始销量为0
+        values.put(ProductEntry.COLUMN_UNIT, 1);//设置初始销售单位为1
+        values.put(ProductEntry.COLUMN_CONTACT, mContactString.trim());
         byte[] mImageByte;
-        if (mSelectedImage != null){
+        if (mSelectedImage != null) {
             mImageByte = DbBitmapUtility.getBytes(mSelectedImage);
-        }else{
+        } else {
             mImageView.setImageResource(R.drawable.empty_image);
-            mImageByte = DbBitmapUtility.getBytes(((BitmapDrawable)mImageView.getDrawable()).getBitmap());
+            mImageByte = DbBitmapUtility.getBytes(((BitmapDrawable) mImageView.getDrawable()).getBitmap());
         }//检查是否添加了图片，如果没有则使用默认图片
-        values.put(ProductEntry.COLUMN_IMAGE,mImageByte);
+        values.put(ProductEntry.COLUMN_IMAGE, mImageByte);
         Uri mNewUri = getContentResolver().insert(ProductEntry.CONTENT_URI, values);  // 保存新产品并反馈结果
         finish();
         if (mNewUri == null) {
@@ -140,5 +156,15 @@ public class NewProductActivity extends AppCompatActivity {
             mSelectedImage = DbBitmapUtility.getResizedBitmap(temporaryImage);
             mImageView.setImageBitmap(mSelectedImage);
         }
+    }
+
+    /**
+     * 检查Email地址是否有效
+     *
+     * @param target 输入的Email地址
+     * @return
+     */
+    private boolean isValidEmail(CharSequence target) {
+        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 }

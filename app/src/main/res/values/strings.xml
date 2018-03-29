@@ -8,9 +8,8 @@
     <string name="hint_price">输入商品单价</string>
     <string name="title_add_new">新商品</string>
     <string name="no_storage">库存不足！</string>
-    <string name="increment">增加库存</string>
-    <string name="decrement">卖出商品</string>
-    <string name="send_email">联系供应商</string>
+    <string name="purchase">增加库存</string>
+    <string name="send_email">订购更多</string>
     <string name="error_saving">商品创建失败！</string>
     <string name="saved_successfully">商品创建成功！</string>
     <string name="delete_confirm">商品删除成功！</string>
@@ -20,7 +19,7 @@
     <string name="delete_product">删除商品</string>
     <string name="add_dummy_data">添加示例</string>
     <string name="order_request">您好，我们想订购更多的</string>
-    <string name="toast_empty_name">商品名称不能为空</string>
+    <string name="toast_empty_name">不能有空的输入项</string>
     <string name="RMB">¥</string>
     <string name="new_product">添加新商品</string>
     <string name="edit_product">编辑商品</string>
@@ -37,4 +36,13 @@
     <string name="unit_limit_msg">销售单位不能小于1</string>
     <string name="set_unit_text">调整销售单位</string>
     <string name="upload_image_info">+</string>
+    <string name="button_sale">销售</string>
+    <string name="empty_text">点击菜单添加商品</string>
+    <string name="new_contact_email">输入Email地址</string>
+    <string name="invalid_quantity">无效的库存数据</string>
+    <string name="invalid_price">无效的价格数据</string>
+    <string name="dummy_contact">example@email.com</string>
+    <string name="invalid_email_address">无效的Email地址</string>
+    <string name="email_subject">订购商品</string>
+    <string name="choose_email_app">Send email...</string>
 </resources>

@@ -11,5 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" />
+    <TextView
+        android:gravity="center"
+        android:id="@+id/empty_text"
+        android:textSize="@dimen/empty_text_size"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="@string/empty_text"/>
 
 </LinearLayout>

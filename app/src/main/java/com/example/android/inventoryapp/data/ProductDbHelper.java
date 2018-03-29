@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
 public class ProductDbHelper extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "products_shelter.db";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + ProductEntry.TABLE_NAME;//删除数据表的命令
@@ -26,7 +26,8 @@ public class ProductDbHelper extends SQLiteOpenHelper {
                         ProductEntry.COLUMN_QUANTITY + " INTEGER NOT NULL DEFAULT 0," +
                         ProductEntry.COLUMN_PRICE + " INTEGER NOT NULL DEFAULT 0," +
                         ProductEntry.COLUMN_SALES + " INTEGER," +
-                        ProductEntry.COLUMN_UNIT + " INTEGER" + ");";
+                        ProductEntry.COLUMN_UNIT + " INTEGER," +
+                        ProductEntry.COLUMN_CONTACT + " TEXT NOT NULL"+");";
         db.execSQL(mSqlCreateProductsTable);
     }
 

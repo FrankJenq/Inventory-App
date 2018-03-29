@@ -12,8 +12,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <!-- 产品名称 -->
@@ -24,8 +24,8 @@
 
                 <!-- 标签 -->
                 <TextView
-                    android:layout_height="wrap_content"
                     android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="@string/label_name"
                     android:textAppearance="?android:textAppearanceSmall" />
 
@@ -59,8 +59,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center_vertical">
 
             <TextView
@@ -73,8 +73,8 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="right">
 
             <ImageView
@@ -155,31 +155,23 @@
         android:padding="@dimen/layout_top">
 
         <Button
-            android:id="@+id/button_increment"
+            android:id="@+id/button_purchase"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/button_margin"
             android:padding="@dimen/button_padding"
-            android:text="@string/increment"
+            android:text="@string/purchase"
             android:textSize="@dimen/button_text_size" />
 
         <Button
-            android:id="@+id/button_decrement"
+            android:id="@+id/button_send_email"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
+            android:layout_gravity="center_horizontal"
             android:padding="@dimen/button_padding"
-            android:text="@string/decrement"
+            android:text="@string/send_email"
             android:textSize="@dimen/button_text_size" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_send_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/send_email"
-        android:textColor="@android:color/white" />
 
 </LinearLayout>

@@ -72,6 +72,25 @@
                     android:hint="@string/hint_price" />
 
             </LinearLayout>
+
+            <!-- 经销商联系方式 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- 标签 -->
+                <TextView
+                    style="@style/CategoryStyle"
+                    android:text="@string/label_price" />
+
+                <!-- 联系方式输入区 -->
+                <EditText
+                    android:id="@+id/new_product_contact"
+                    style="@style/EditorFieldStyle"
+                    android:hint="@string/new_contact_email" />
+
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

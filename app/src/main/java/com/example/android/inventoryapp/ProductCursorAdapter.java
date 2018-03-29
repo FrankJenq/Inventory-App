@@ -1,21 +1,23 @@
 package com.example.android.inventoryapp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.inventoryapp.data.DbBitmapUtility;
 import com.example.android.inventoryapp.data.ProductContract.ProductEntry;
 
-public class ProductCursorAdapter extends CursorAdapter {
+public class ProductCursorAdapter extends CursorAdapter{
 
     /**
      * Constructs a new {@link ProductCursorAdapter}.
@@ -50,14 +52,37 @@ public class ProductCursorAdapter extends CursorAdapter {
      *                correct row.
      */
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, final Cursor cursor) {
         // Find fields to populate in inflated template
         TextView productName = (TextView) view.findViewById(R.id.name);
         TextView productQuantity = (TextView) view.findViewById(R.id.quantity);
         TextView productPrice = (TextView) view.findViewById(R.id.price);
         TextView productSales = (TextView) view.findViewById(R.id.sales);
         ImageView productImageView = (ImageView) view.findViewById(R.id.product_image);
-        Log.i("tag2", "bindView: ");
+        final Button salesButton = (Button)view.findViewById(R.id.button_sale);
+        salesButton.setFocusable(false);
+        salesButton.setTag(cursor.getPosition());
+        salesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cursor.moveToPosition((int)salesButton.getTag());
+                int quantity = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY));
+                int unit = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_UNIT));
+                //库存足够的时候出售商品并修改数据
+                if (quantity - unit >= 0) {
+                    int itemId = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_ID));
+                    String selection = ProductEntry.COLUMN_ID + "=?";
+                    String[] selectionArgs = new String[]{Integer.toString(itemId)};
+                    int sales = cursor.getInt(cursor.getColumnIndex(ProductEntry.COLUMN_SALES));
+                    ContentValues values = new ContentValues();
+                    values.put(ProductEntry.COLUMN_QUANTITY, quantity - unit);
+                    values.put(ProductEntry.COLUMN_SALES, sales + unit);
+                    context.getContentResolver().update(ProductEntry.CONTENT_URI, values, selection, selectionArgs);
+                } else {
+                    Toast.makeText(context, context.getString(R.string.no_storage), Toast.LENGTH_SHORT).show();
+                }//库存不足时显示提示信息
+            }
+        });
         // Get ColumnIndex from cursor
         int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_NAME);
         int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
@@ -69,7 +94,6 @@ public class ProductCursorAdapter extends CursorAdapter {
         String quantityString = cursor.getString(quantityColumnIndex);
         String priceString = cursor.getString(priceColumnIndex);
         String salesString = cursor.getString(salesColumnIndex);
-        Log.i("tag 1", "bindView: ");
         Bitmap image = DbBitmapUtility.getImage(cursor.getBlob(imageColumnIndex));
         if (TextUtils.isEmpty(quantityString) || Integer.parseInt(quantityString) == 0) {
             quantityString = context.getString(R.string.no_storage);//产品存量为0时提示信息

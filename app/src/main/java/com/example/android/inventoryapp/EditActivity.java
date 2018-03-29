@@ -12,7 +12,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,7 +32,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
     private TextView mUnitView;
     private TextView mSalesView;
     private ImageView mImageView;
-    private int mSales;
+    private String mContactAddress;
     private static final int EDIT_LOADER = 0;
     private static final String LOG_TAG = EditActivity.class.getSimpleName();
 
@@ -49,12 +48,10 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         mUnitView = findViewById(R.id.sell_unit);
         mSalesView = findViewById(R.id.text_sales);
         mImageView = findViewById(R.id.show_image);
-        Button purchaseProductButton = findViewById(R.id.button_increment);
-        Button sellProductButton = findViewById(R.id.button_decrement);
+        Button purchaseProductButton = findViewById(R.id.button_purchase);
         Button unitUpButton = findViewById(R.id.button_increase_unit);
         Button unitDownButton = findViewById(R.id.button_decrease_unit);
         Button emailButton = findViewById(R.id.button_send_email);
-        Log.i("EditACT", "onCreate: ");
         /**
          * 设置增添和减少产品数量的按钮
          */
@@ -65,21 +62,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 int quantity = Integer.parseInt(mQuantityView.getText().toString().trim());
                 values.put(ProductEntry.COLUMN_QUANTITY, quantity + 1);
                 getContentResolver().update(mCurrentUri, values, null, null);
-            }
-        });
-        sellProductButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ContentValues values = new ContentValues();
-                int quantity = Integer.parseInt(mQuantityView.getText().toString().trim());
-                int unit = Integer.parseInt(mUnitView.getText().toString().trim());
-                if (quantity - unit >= 0) {
-                    values.put(ProductEntry.COLUMN_QUANTITY, quantity - unit);
-                    values.put(ProductEntry.COLUMN_SALES, mSales + unit);
-                    getContentResolver().update(mCurrentUri, values, null, null);
-                } else {
-                    Toast.makeText(getApplicationContext(), getString(R.string.no_storage), Toast.LENGTH_SHORT).show();
-                }//没有库存时显示提示信息
             }
         });
 
@@ -114,7 +96,11 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onClick(View v) {
                 String orderSummary = getString(R.string.order_request) + mNameView.getText().toString() + "。";
-                composeEmail(orderSummary);
+                Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
+                        "mailto", mContactAddress, null));
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+                emailIntent.putExtra(Intent.EXTRA_TEXT, orderSummary);
+                startActivity(Intent.createChooser(emailIntent, getString(R.string.choose_email_app)));
             }
         });
     }
@@ -147,7 +133,8 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
                 ProductEntry.COLUMN_PRICE,
                 ProductEntry.COLUMN_QUANTITY,
                 ProductEntry.COLUMN_SALES,
-                ProductEntry.COLUMN_UNIT
+                ProductEntry.COLUMN_UNIT,
+                ProductEntry.COLUMN_CONTACT
         };
         return new CursorLoader(this, mCurrentUri,
                 projection, null, null, null);
@@ -159,7 +146,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         if (cursor == null || cursor.getCount() < 1) {
             return;
         }
-        Log.i("TAGG2", "onLoadFinished: ");
         if (cursor.moveToFirst()) {
             int nameColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_NAME);
             int quantityColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_QUANTITY);
@@ -167,12 +153,13 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             int imageColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_IMAGE);
             int salesColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_SALES);
             int unitColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_UNIT);
-            Log.i("TAGG", "onLoadFinished: ");
+            int contactColumnIndex = cursor.getColumnIndex(ProductEntry.COLUMN_CONTACT);
             String name = cursor.getString(nameColumnIndex);
             int quantity = cursor.getInt(quantityColumnIndex);
             int price = cursor.getInt(priceColumnIndex);
-            mSales = cursor.getInt(salesColumnIndex);
+            int sales = cursor.getInt(salesColumnIndex);
             int unit = cursor.getInt(unitColumnIndex);
+            mContactAddress = cursor.getString(contactColumnIndex);
             byte[] imageByte = cursor.getBlob(imageColumnIndex);
             if (imageByte != null) {
                 Bitmap image = DbBitmapUtility.getImage(imageByte);
@@ -183,7 +170,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
             mNameView.setText(name);
             mQuantityView.setText(Integer.toString(quantity));
             mPriceView.setText(getString(R.string.RMB) + Integer.toString(price));
-            mSalesView.setText(Integer.toString(mSales));
+            mSalesView.setText(Integer.toString(sales));
             mUnitView.setText(Integer.toString(unit));
         }
     }
