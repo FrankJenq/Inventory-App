@@ -181,18 +181,6 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         mQuantityView.setText("");
     }
 
-    /**
-     * 发送电子邮件联系供应商.
-     */
-    public void composeEmail(String text) {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:"));
-        intent.putExtra(Intent.EXTRA_TEXT, text);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
-    }
-
     private void showDeleteConfirmationDialog() {
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the positive and negative buttons on the dialog.
@@ -200,7 +188,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         builder.setMessage(R.string.delete_dialog_msg);
         builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the pet.
+                // User clicked the "Delete" button, so delete the product.
                 getContentResolver().delete(mCurrentUri, null, null);
                 finish();
             }
@@ -208,7 +196,7 @@ public class EditActivity extends AppCompatActivity implements LoaderManager.Loa
         builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the pet.
+                // and continue editing the product.
                 if (dialog != null) {
                     dialog.dismiss();
                 }

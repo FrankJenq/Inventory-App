@@ -48,6 +48,7 @@
 
                 <!-- 数量输入区 -->
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/new_product_quantity"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_quantity" />
@@ -67,6 +68,7 @@
 
                 <!-- 价格输入区 -->
                 <EditText
+                    android:inputType="number"
                     android:id="@+id/new_product_price"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/hint_price" />
