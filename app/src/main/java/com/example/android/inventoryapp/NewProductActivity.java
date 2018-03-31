@@ -52,9 +52,7 @@ public class NewProductActivity extends AppCompatActivity {
         mUploadImageTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+                testUseExternalStorage(v);
                 mUploadImageTextView.setVisibility(View.GONE);
                 mImageView.setVisibility(View.VISIBLE);
             }
@@ -63,9 +61,9 @@ public class NewProductActivity extends AppCompatActivity {
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testUseExternalStorage(v);
+               selectImage();
             }
-        });
+        });//点击选好的图片可以重新进行选择
 
         // 设置保存按钮
         Button saveButton = findViewById(R.id.save_button);
@@ -178,7 +176,7 @@ public class NewProductActivity extends AppCompatActivity {
         // 对Android 6.0以上的系统检查是否具有读写扩展存储的权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED) {
 
@@ -188,7 +186,7 @@ public class NewProductActivity extends AppCompatActivity {
             } else {
                 selectImage();
             }
-        } else{//如果系统版本低于Android 6.0则进行权限检查
+        } else{//如果系统版本低于Android 6.0则不进行权限检查
             selectImage();
         }
     }
