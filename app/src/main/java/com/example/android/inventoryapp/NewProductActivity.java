@@ -53,15 +53,13 @@ public class NewProductActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 testUseExternalStorage(v);
-                mUploadImageTextView.setVisibility(View.GONE);
-                mImageView.setVisibility(View.VISIBLE);
             }
         });
         // 点击ImageView可以上传图片
         mImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               selectImage();
+                selectImage();
             }
         });//点击选好的图片可以重新进行选择
 
@@ -144,6 +142,7 @@ public class NewProductActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode,
                                     Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+        //如果成功选择了图片则显示图片
         if (resultCode == RESULT_OK) {
             Uri selectedImage = imageReturnedIntent.getData();
             String[] filePathColumn = {MediaStore.Images.Media.DATA};
@@ -158,6 +157,11 @@ public class NewProductActivity extends AppCompatActivity {
             Bitmap temporaryImage = BitmapFactory.decodeFile(filePath);
             mSelectedImage = DbBitmapUtility.getResizedBitmap(temporaryImage);
             mImageView.setImageBitmap(mSelectedImage);
+            //如果是第一次选择图片则修改mUploadImageTextView的可见性为GONE，mImageView的可见性为VISIBLE
+            if (mUploadImageTextView.getVisibility() != View.GONE) {
+                mUploadImageTextView.setVisibility(View.GONE);
+                mImageView.setVisibility(View.VISIBLE);
+            }
         }
     }
 
@@ -186,7 +190,7 @@ public class NewProductActivity extends AppCompatActivity {
             } else {
                 selectImage();
             }
-        } else{//如果系统版本低于Android 6.0则不进行权限检查
+        } else {//如果系统版本低于Android 6.0则不进行权限检查
             selectImage();
         }
     }
